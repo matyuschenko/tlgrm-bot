@@ -1,0 +1,2 @@
+date time	chat_id	user_id	name_lastname	username	text
+
