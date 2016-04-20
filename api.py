@@ -48,7 +48,13 @@ def prepareOutcome(answer):
 			for f in answer['fragments']:
 				if f['hint_id'] == h:
 					hints[h]['word'] = answer['text'][f['start']:f['end']]
-		hints_formatted = [' — '.join([hints[h]['word'], '<b>'+hints[h]['name']+'</b>', hints[h]['description']]) for h in hints]
+					hints[h]['start'] = f['start']
+		sorted_hints = sorted(hints.items(), key=lambda x: x[1]['start'])
+		hints_formatted = ['\n'.join([
+			'<i>'+h[1]['word']+'</i>',
+			'<b>'+h[1]['name']+'</b>',
+			h[1]['description']
+		]) for h in sorted_hints]
 		outcome = '\n\n'.join(hints_formatted).replace('&nbsp;', ' ')
 
 	return outcome
@@ -61,6 +67,7 @@ def main(text):
 		data['text'] = text
 
 		# send request to Glavred
+		print('sending request to Glavred with session id %s' % (params['session']))
 		answer = json.loads(requests.post(apiurls['proofread'], params=params, data=data).text)
 		
 		if answer['status'] == 'ok' and 'fragments' in answer:
@@ -89,4 +96,4 @@ def main(text):
 
 if __name__ == '__main__':
 	# print(checkText('качественный текст для проверки. наверное, будет качественный результат'))
-	print(main('Сделал альфа-версию бота. Пока умеет только отправлять текст в Главред и тупо копировать ошибки из ответа. Надо много работать над структурой ответа, тестировать и вообще.'))
+	print(main('Сделал альфа-версию бота. Пока умеет только отправлять текст в Главред и тупо копировать ошибки из ответа. Надо много работать над структурой ответа, тестировать и вообще. Возможно, получится полезный инструмент'))
