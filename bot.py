@@ -31,11 +31,13 @@ bot = telebot.TeleBot(bot_config.token)
 @bot.message_handler(commands=['start', 'help'])
 def handle_start_help(message):
 	log(message)
+	botan.track(bot_config.botan_token, message.chat.id, message)
 	bot.reply_to(message, bot_config.help_message)
 
 @bot.message_handler(commands=['settings'])
 def handle_start_help(message):
 	log(message)
+	botan.track(bot_config.botan_token, message.chat.id, message)
 	bot.reply_to(message, bot_config.settings_message)
 
 @bot.message_handler(func=lambda m: True, content_types=['text'])
